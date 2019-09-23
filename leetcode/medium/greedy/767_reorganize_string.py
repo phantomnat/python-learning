@@ -1,20 +1,46 @@
+import heapq
+
 class Solution:
     def reorganizeString(self, S: str) -> str:
 
+        # greedy with heap
+
+        pq = [(-S.count(x), x) for x in set(S)]
+        print(pq)
+        heapq.heapify(pq)
+        print(pq)
+        if any(-nc > (len(S)+1)/2 for nc,x in pq):
+            return ""
+        
+        ans = []
+        while len(pq) >= 2:
+            n1, c1 = heapq.heappop(pq)
+            n2, c2 = heapq.heappop(pq)
+            ans.extend([c1,c2])
+            if n1+1: heapq.heappush(pq, (n1+1, c1))
+            if n2+1: heapq.heappush(pq, (n2+1, c2))
+            print(pq)
+
+        return ''.join(ans) + (pq[0][1] if pq else '')
+
+
         # solution
-        N = len(S)
-        A = []
-        l = sorted((S.count(x),x) for x in set(S))
-        print(l)
-        for c, x in l:
-            if c > (N+1)/2: return ""
-            A.extend(c * x)
-            print('A', A)
-        ans = [''] * N
-        # ans[::2], ans[1::2] = A[N/2:], A[:N/2]
-        ans[::2], ans[1::2] = A[N//2:], A[:N//2]
-        print(ans)
-        return ''.join(ans)
+
+        # N = len(S)
+        # A = []
+        # l = sorted((S.count(x),x) for x in set(S))
+        # print(l)
+        # for c, x in l:
+        #     if c > (N+1)/2: return ""
+        #     A.extend(c * x)
+        #     print('A', A)
+        # ans = [''] * N
+        # # ans[::2], ans[1::2] = A[N/2:], A[:N/2]
+        # ans[::2], ans[1::2] = A[N//2:], A[:N//2]
+        # print(ans)
+        # return ''.join(ans)
+
+
         # my
 
         # mem = {}
